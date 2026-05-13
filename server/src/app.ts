@@ -4,6 +4,7 @@ import { toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth";
 import globalErrorHandler from "./middlewares/globalErrorHandler";
 import { categoriesRoutes } from "./modules/categories/category.routes";
+import { userRoutes } from "./modules/users/user.routes";
 
 const app: Application = express();
 
@@ -16,7 +17,10 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 // Categories
-app.use("/categories", categoriesRoutes);
+app.use("/api/categories", categoriesRoutes);
+
+// users
+app.use("/api/users", userRoutes);
 
 app.use(globalErrorHandler);
 
