@@ -9,7 +9,11 @@ const createCategories = async (
 ) => {
   try {
     const result = await categoriesServices.createCategories(req.body);
-    res.status(200).send(result);
+    res.status(201).json({
+      success: true,
+      message: "Category created successfully",
+      data: result,
+    });
   } catch (err) {
     next(err);
   }
@@ -24,7 +28,11 @@ const getAllCategories = async (
   try {
     const result = await categoriesServices.getAllCategories();
 
-    res.status(200).send(result);
+    res.status(200).json({
+      success: true,
+      message: "All categories retrieved successfully",
+      data: result,
+    });
   } catch (err) {
     next(err);
   }
@@ -38,16 +46,22 @@ const getSingleCategory = async (
 ) => {
   try {
     const categoryId = req.params.id as string;
-    if (!categoryId) {
-      res
-        .status(400)
-        .json({ success: false, message: "Category ID is required" });
-      return;
-    }
 
     const result = await categoriesServices.getSingleCategory(categoryId);
 
-    res.status(200).send(result);
+    if (!result) {
+      res.status(404).json({
+        success: false,
+        message: "Category not found",
+      });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Category retrieved successfully",
+      data: result,
+    });
   } catch (err) {
     next(err);
   }
@@ -61,19 +75,17 @@ const updateCategory = async (
 ) => {
   try {
     const categoryId = req.params.id as string;
-    if (!categoryId) {
-      res
-        .status(400)
-        .json({ success: false, message: "Category ID is required" });
-      return;
-    }
 
     const result = await categoriesServices.updateCategory(
       categoryId,
       req.body,
     );
 
-    res.status(200).send(result);
+    res.status(200).json({
+      success: true,
+      message: "Category updated successfully",
+      data: result,
+    });
   } catch (err) {
     next(err);
   }
@@ -87,25 +99,19 @@ const deleteCategory = async (
 ) => {
   try {
     const categoryId = req.params.id as string;
-    if (!categoryId) {
-      res
-        .status(400)
-        .json({ success: false, message: "Category ID is required" });
-      return;
-    }
 
     const result = await categoriesServices.deleteCategory(categoryId);
 
-    res.status(204).send(result);
+    res.status(204).json();
   } catch (err) {
     next(err);
   }
-}; 
+};
 
 export const categoriesController = {
   createCategories,
   getAllCategories,
   getSingleCategory,
   updateCategory,
-  deleteCategory
+  deleteCategory,
 };

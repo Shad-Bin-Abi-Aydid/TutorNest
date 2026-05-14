@@ -37,6 +37,29 @@ async function main() {
   }
 
   console.log("Seeded admin:", admin.email);
+
+  // Temporary seed: categories are seeded here because the admin dashboard
+  // is not yet implemented. Once role-based routes are live, admin will
+  // manage categories via the API.
+
+  const categories = [
+    "Math",
+    "Physics",
+    "English",
+    "Chemistry",
+    "Biology",
+    "History",
+  ];
+
+  for (const name of categories) {
+    await prisma.category.upsert({
+      where: { name },
+      update: {},
+      create: { name },
+    });
+  }
+
+  console.log("Seeded categories");
 }
 
 main()

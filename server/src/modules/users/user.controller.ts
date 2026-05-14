@@ -26,6 +26,13 @@ const getSingleUser = async (
     const userId = req.params.id as string;
 
     const result = await userServices.getSingleUser(userId);
+     if (!result) {
+      res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+      return;
+    }
 
     res.status(200).json({
       success: true,
