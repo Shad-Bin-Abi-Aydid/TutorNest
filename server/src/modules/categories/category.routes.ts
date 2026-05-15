@@ -1,10 +1,11 @@
 import express from "express";
 import { categoriesController } from "./category.controller";
+import { requireAuth, UserRole } from "../../middlewares/requireAuth";
 
 const router  = express.Router();
 
 // create Categories
-router.post("/", categoriesController.createCategories);
+router.post("/", requireAuth(UserRole.ADMIN), categoriesController.createCategories);
 
 // get categories
 router.get("/", categoriesController.getAllCategories);
@@ -13,10 +14,10 @@ router.get("/", categoriesController.getAllCategories);
 router.get("/:id", categoriesController.getSingleCategory);
 
 // update Category
-router.patch("/:id", categoriesController.updateCategory);
+router.patch("/:id", requireAuth(UserRole.ADMIN), categoriesController.updateCategory);
 
 // Delete Category
-router.delete("/:id", categoriesController.deleteCategory);
+router.delete("/:id", requireAuth(UserRole.ADMIN), categoriesController.deleteCategory);
 
 
 export const categoriesRoutes = router;
