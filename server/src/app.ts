@@ -6,6 +6,7 @@ import globalErrorHandler from "./middlewares/globalErrorHandler";
 import { categoriesRoutes } from "./modules/categories/category.routes";
 import { userRoutes } from "./modules/users/user.routes";
 import { tutorProfileRoutes } from "./modules/tutorProfile/tutorProfile.routes";
+import { bookingRoutes } from "./modules/bookings/booking.routes";
 
 const app: Application = express();
 
@@ -25,6 +26,9 @@ app.use("/api/users", userRoutes);
 
 // tutorProfiles
 app.use("/api/tutor-profiles", tutorProfileRoutes);
+
+// Booking
+app.use("/api/booking", bookingRoutes);
 
 app.use(globalErrorHandler);
 
