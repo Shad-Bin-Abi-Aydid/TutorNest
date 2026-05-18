@@ -1,3 +1,4 @@
+import { BookingStatus } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 import { UserRole } from "../../middlewares/requireAuth";
 
@@ -101,8 +102,82 @@ const getSingleBooking = async (
   return null;
 };
 
+// update Booking
+const updateBookingStatus = async (
+  bookingId: string,
+  newStatus: BookingStatus,
+  userId: string,
+  role: UserRole,
+) => {
+  const booking = await prisma.booking.findUnique({
+    where: {
+      id: bookingId,
+    },
+  });
+
+  if (!booking) {
+    return null;
+  }
+
+  // for admin
+  if (role === UserRole.ADMIN) {
+    return prisma.booking.update({
+      where: { id: bookingId },
+      data: {
+        status: newStatus,
+      },
+      include: bookingInclude,
+    });
+  }
+
+  // for tutor
+  if (
+    role === UserRole.TUTOR &&
+    (newStatus === BookingStatus.CANCELLED ||
+      newStatus === BookingStatus.COMPLETED)
+  ) {
+    const tutorProfile = await prisma.tutorProfile.findUnique({
+      where: {
+        userId,
+      },
+    });
+
+    if (!tutorProfile) return null;
+
+    if (tutorProfile.id !== booking.tutorProfileId) return null;
+
+    return prisma.booking.update({
+      where: {
+        id: bookingId,
+      },
+      data: {
+        status: newStatus,
+      },
+      include: bookingInclude,
+    });
+  }
+
+  // for student
+  if (role === UserRole.STUDENT && newStatus === BookingStatus.CANCELLED) {
+
+
+    if(userId !== booking.studentId) return null
+
+    return prisma.booking.update({
+      where: {
+        id: bookingId,
+      },
+      data: {
+        status: newStatus,
+      },
+      include: bookingInclude,
+    });
+  }
+};
+
 export const bookingServices = {
   createBooking,
   getMyBookings,
   getSingleBooking,
+  updateBookingStatus,
 };

@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { bookingServices } from "./booking.services";
+import { UserRole } from "../../middlewares/requireAuth";
 
 // create booking
 const createBooking = async (
@@ -80,8 +81,46 @@ const getSingleBooking = async (
   }
 };
 
+// update booking
+const updateBookingStatus = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const userId = req.user!.id;
+    const role = req.user!.role as UserRole;
+    const bookingId = req.params.id as string;
+    const newStatus = req.body.status;
+
+    const result = await bookingServices.updateBookingStatus(
+      bookingId,
+      newStatus,
+      userId,
+      role,
+    );
+
+    if (!result) {
+      res.status(404).json({
+        success: false,
+        message: "Booking not found",
+      });
+      return;
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Booking status update successfully",
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const bookingController = {
   createBooking,
   getMyBookings,
   getSingleBooking,
+  updateBookingStatus,
 };

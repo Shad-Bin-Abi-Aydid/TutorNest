@@ -17,4 +17,7 @@ router.get("/", requireAuth(), bookingController.getMyBookings);
 // get single booking
 router.get("/:id", requireAuth(), bookingController.getSingleBooking);
 
+// update booking
+router.patch("/:id", requireAuth(), bookingController.updateBookingStatus);
+
 export const bookingRoutes = router;
