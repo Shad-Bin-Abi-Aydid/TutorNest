@@ -20,4 +20,11 @@ router.get("/:id", requireAuth(), bookingController.getSingleBooking);
 // update booking
 router.patch("/:id", requireAuth(), bookingController.updateBookingStatus);
 
+// delete booking
+router.delete(
+  "/:id",
+  requireAuth(UserRole.ADMIN),
+  bookingController.deleteBooking,
+);
+
 export const bookingRoutes = router;

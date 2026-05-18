@@ -159,9 +159,7 @@ const updateBookingStatus = async (
 
   // for student
   if (role === UserRole.STUDENT && newStatus === BookingStatus.CANCELLED) {
-
-
-    if(userId !== booking.studentId) return null
+    if (userId !== booking.studentId) return null;
 
     return prisma.booking.update({
       where: {
@@ -175,9 +173,33 @@ const updateBookingStatus = async (
   }
 };
 
+// delete booking
+const deleteBooking = async (role: string, bookingId: string) => {
+  const booking = await prisma.booking.findUnique({
+    where: {
+      id: bookingId,
+    },
+  });
+
+  if (!booking) {
+    return null;
+  }
+
+  if(role === UserRole.ADMIN){
+    return prisma.booking.delete({
+      where:{
+        id:bookingId
+      }
+    })
+  }
+
+  return null;
+};
+
 export const bookingServices = {
   createBooking,
   getMyBookings,
   getSingleBooking,
   updateBookingStatus,
+  deleteBooking,
 };

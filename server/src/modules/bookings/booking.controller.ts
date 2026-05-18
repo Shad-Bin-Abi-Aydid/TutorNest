@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { bookingServices } from "./booking.services";
 import { UserRole } from "../../middlewares/requireAuth";
+import { success } from "better-auth";
 
 // create booking
 const createBooking = async (
@@ -118,9 +119,38 @@ const updateBookingStatus = async (
   }
 };
 
+// delete booking
+const deleteBooking = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const role = req.user!.role;
+    const bookingId = req.params.id as string;
+
+    const result = await bookingServices.deleteBooking(role, bookingId);
+
+    if (!result) {
+      res.status(404).json({
+        success: false,
+        message: "Booking not found",
+      });
+      return;
+    }
+    res.status(200).json({
+      success: true,
+      message: "Delete successfully",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const bookingController = {
   createBooking,
   getMyBookings,
   getSingleBooking,
   updateBookingStatus,
+  deleteBooking,
 };
