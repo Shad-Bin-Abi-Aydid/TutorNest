@@ -28,7 +28,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/tutor-profiles", tutorProfileRoutes);
 
 // Booking
-app.use("/api/booking", bookingRoutes);
+app.use("/api/bookings", bookingRoutes);
 
 app.use(globalErrorHandler);
 

@@ -37,6 +37,15 @@ const getMyBookings = async (
 
     const result = await bookingServices.getMyBookings(userId, userRole);
 
+    if(!result || result.length < 1){
+      res.status(404).json({
+        success:false,
+        message:"Booking not found"
+      
+    })
+    return;
+    }
+
     res.status(200).json({
       success: true,
       message: "Booking details found successfully",

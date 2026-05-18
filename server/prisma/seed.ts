@@ -1,5 +1,6 @@
 import "dotenv/config";
-import bcrypt from "bcryptjs";
+import { hashPassword } from "@better-auth/utils/password";
+
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/prisma/client";
 
@@ -7,7 +8,7 @@ const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  const hashedPassword = await bcrypt.hash("Admin@123456", 10);
+  const hashedPassword = await hashPassword("Admin@123456");
 
   const admin = await prisma.user.upsert({
     where: { email: "admin@tutornest.com" },
@@ -33,6 +34,11 @@ async function main() {
         userId: admin.id,
         password: hashedPassword,
       },
+    });
+  } else {
+    await prisma.account.update({
+      where: { id: existingAccount.id },
+      data: { password: hashedPassword },
     });
   }
 

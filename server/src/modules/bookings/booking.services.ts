@@ -49,7 +49,7 @@ const getMyBookings = async (userId: string, role: string) => {
     });
 
     if (!tutorProfile) {
-      return [];
+      return null;
     }
 
     return prisma.booking.findMany({
