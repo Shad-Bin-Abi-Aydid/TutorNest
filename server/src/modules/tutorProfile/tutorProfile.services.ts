@@ -34,14 +34,81 @@ const createTutorProfile = async (data: {
 };
 
 // get all tutorProfiles
-const getAllTutorProfiles = async () => {
+const getAllTutorProfiles = async (filters: {
+  categoryId?: string | undefined;
+  minPrice?: number | undefined;
+  maxPrice?: number | undefined;
+  minRating?: number | undefined;
+  search?: string | undefined;
+  sortBy?: "pricePerHour" | "experienceYears" | "rating" | undefined;
+  sortOrder?: "asc" | "desc" | undefined;
+}) => {
+  const {
+    categoryId,
+    minPrice,
+    maxPrice,
+    minRating,
+    search,
+    sortBy,
+    sortOrder,
+  } = filters;
+
+  const prismaOrderBy =
+    sortBy && sortBy !== "rating"
+      ? { [sortBy]: sortOrder ?? "asc" }
+      : undefined;
+
   const result = await prisma.tutorProfile.findMany({
+    where: {
+      // filter by category
+      ...(categoryId && {
+        categories: { some: { categoryId } },
+      }),
+
+      // filter by pricePerHour
+      ...((minPrice !== undefined || maxPrice !== undefined) && {
+        pricePerHour: {
+          ...(minPrice !== undefined && { gte: minPrice }),
+          ...(maxPrice !== undefined && { lte: maxPrice }),
+        },
+      }),
+
+      // search filter
+      ...(search && {
+        user: { name: { contains: search, mode: "insensitive" } },
+      }),
+    },
+
     include: {
       user: { select: { id: true, name: true, email: true } },
       categories: { include: { category: true } },
+      reviews: { select: { rating: true } },
     },
+    ...(prismaOrderBy && { orderBy: prismaOrderBy }),
   });
-  return result;
+
+  let profiles = result.map(({ reviews, ...rest }) => ({
+    ...rest,
+    avgRating:
+      reviews.length > 0
+        ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+        : null,
+  }));
+
+  if (minRating !== undefined) {
+    profiles = profiles.filter(
+      (p) => p.avgRating !== null && p.avgRating >= minRating,
+    );
+  }
+
+  if (sortBy === "rating") {
+    const order = sortOrder === "desc" ? -1 : 1;
+    profiles.sort(
+      (a, b) => ((a.avgRating ?? -1) - (b.avgRating ?? -1)) * order,
+    );
+  }
+
+  return profiles;
 };
 
 // get single tutorProfile

@@ -27,7 +27,31 @@ const getAllTutorProfiles = async (
   next: NextFunction,
 ) => {
   try {
-    const result = await tutorProfileServices.getAllTutorProfiles();
+    const {
+      categoryId,
+      minPrice,
+      maxPrice,
+      minRating,
+      search,
+      sortBy,
+      sortOrder,
+    } = req.query;
+
+    const filters = {
+      categoryId: categoryId as string | undefined,
+      minPrice: minPrice ? parseFloat(minPrice as string) : undefined,
+      maxPrice: maxPrice ? parseFloat(maxPrice as string) : undefined,
+      minRating: minRating ? parseFloat(minRating as string) : undefined,
+      search: search as string | undefined,
+      sortBy: sortBy as
+        | "pricePerHour"
+        | "experienceYears"
+        | "rating"
+        | undefined,
+      sortOrder: sortOrder as "asc" | "desc" | undefined,
+    };
+
+    const result = await tutorProfileServices.getAllTutorProfiles(filters);
 
     res.status(200).json({
       success: true,
