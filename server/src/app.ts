@@ -7,6 +7,7 @@ import { categoriesRoutes } from "./modules/categories/category.routes";
 import { userRoutes } from "./modules/users/user.routes";
 import { tutorProfileRoutes } from "./modules/tutorProfile/tutorProfile.routes";
 import { bookingRoutes } from "./modules/bookings/booking.routes";
+import { availabilityRouter } from "./modules/availability/availability.routes";
 
 const app: Application = express();
 
@@ -29,6 +30,9 @@ app.use("/api/tutor-profiles", tutorProfileRoutes);
 
 // Booking
 app.use("/api/bookings", bookingRoutes);
+
+// availability
+app.use("/api/availabilities", availabilityRouter);
 
 app.use(globalErrorHandler);
 
