@@ -8,6 +8,7 @@ import { userRoutes } from "./modules/users/user.routes";
 import { tutorProfileRoutes } from "./modules/tutorProfile/tutorProfile.routes";
 import { bookingRoutes } from "./modules/bookings/booking.routes";
 import { availabilityRouter } from "./modules/availability/availability.routes";
+import { reviewRouter } from "./modules/reviews/review.routes";
 
 const app: Application = express();
 
@@ -33,6 +34,9 @@ app.use("/api/bookings", bookingRoutes);
 
 // availability
 app.use("/api/availabilities", availabilityRouter);
+
+// review
+app.use("/api/reviews", reviewRouter)
 
 app.use(globalErrorHandler);
 
