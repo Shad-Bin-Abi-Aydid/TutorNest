@@ -3,14 +3,16 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import type { TutorProfile } from "@/types/tutor.type";
 
-import TutorCard from "./TutorCard";
+import TutorCard from "@/components/tutors/TutorCard";
 
 export default async function FeaturedTutors() {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/api/tutor-profiles?sortBy=rating&sortOrder=desc`,
   );
   const result = await res.json();
+  
   const tutors: TutorProfile[] = result.data ?? [];
+
 
   if (tutors.length === 0) {
     return (

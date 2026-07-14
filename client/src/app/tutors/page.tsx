@@ -1,0 +1,35 @@
+import TutorList from "@/components/tutors/TutorList";
+import { Category, TutorFilters } from "@/types/tutor.type";
+
+function firstOf(value: string | string[] | undefined): string | undefined {
+  return Array.isArray(value) ? value[0] : value;
+}
+
+export default async function TutorsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const params = await searchParams;
+
+  const filters: TutorFilters = {
+    search: firstOf(params.search),
+    categoryId: firstOf(params.categoryId),
+    minPrice: firstOf(params.minPrice),
+    maxPrice: firstOf(params.maxPrice),
+    minRating: firstOf(params.minRating),
+    sortBy: firstOf(params.sortBy),
+    sortOrder: firstOf(params.sortOrder),
+  };
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/categories`,
+    );
+    const result = await res.json();
+    
+    const categories: Category[]= result.data ?? [];
+  
+
+
+  return <TutorList filters = {filters}/>;
+}
