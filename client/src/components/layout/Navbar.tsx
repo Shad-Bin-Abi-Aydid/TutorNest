@@ -67,7 +67,7 @@ const Navbar = ({
     url: "/",
     src: "",
     alt: "logo",
-    title: "TutorNext",
+    title: "TutorNest",
   },
   menu = [
     { title: "Home", url: "/" },
@@ -83,13 +83,13 @@ const Navbar = ({
 }: Navbar1Props) => {
   return (
     <section className={cn("py-4", className)}>
-      <div className="container">
+      <div className="container mx-auto">
         {/* Desktop Menu */}
         <nav className="hidden items-center justify-between lg:flex">
           <div className="flex items-center gap-6">
             {/* Logo */}
             <Link href={logo.url} className="flex items-center gap-2">
-              <span className="text-lg font-semibold tracking-tighter">
+              <span className="text-lg font-semibold tracking-tighter text-primary">
                 {logo.title}
               </span>
             </Link>
@@ -117,7 +117,7 @@ const Navbar = ({
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link href={logo.url} className="flex items-center gap-2">
-              <span className="text-lg font-semibold tracking-tighter">
+              <span className="text-lg font-semibold tracking-tighter text-primary">
                 {logo.title}
               </span>
             </Link>
@@ -133,7 +133,10 @@ const Navbar = ({
                 <SheetContent className="overflow-y-auto">
                   <SheetHeader>
                     <SheetTitle>
-                      <Link href={logo.url} className="flex items-center gap-2">
+                      <Link
+                        href={logo.url}
+                        className="flex items-center gap-2 text-primary"
+                      >
                         {" "}
                         {logo.title}
                       </Link>

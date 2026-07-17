@@ -12,6 +12,19 @@ import {
 } from "@/components/ui/card";
 import type { TutorProfile } from "@/types/tutor.type";
 
+const CATEGORY_BADGE_COLORS = [
+  "bg-primary/10 text-primary",
+  "bg-chart-2/15 text-chart-2",
+  "bg-chart-3/15 text-chart-3",
+  "bg-chart-4/15 text-chart-4",
+  "bg-chart-5/15 text-chart-5",
+];
+
+function categoryBadgeColor(name: string) {
+  const hash = [...name].reduce((sum, char) => sum + char.charCodeAt(0), 0);
+  return CATEGORY_BADGE_COLORS[hash % CATEGORY_BADGE_COLORS.length];
+}
+
 export default function TutorCard({ tutor }: { tutor: TutorProfile }) {
   const { id, image, bio, experienceYears, pricePerHour, avgRating } = tutor;
   const { name } = tutor.user;
@@ -42,7 +55,7 @@ export default function TutorCard({ tutor }: { tutor: TutorProfile }) {
           {categoryNames.map((categoryName) => (
             <span
               key={categoryName}
-              className="rounded-full border px-3 py-1 text-xs font-medium text-muted-foreground"
+              className={`rounded-full px-3 py-1 text-xs font-medium ${categoryBadgeColor(categoryName)}`}
             >
               {categoryName}
             </span>

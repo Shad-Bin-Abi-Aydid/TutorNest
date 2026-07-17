@@ -32,16 +32,15 @@ export default async function TutorList({
   if (tutors.length === 0) {
     return (
       <section className="container mx-auto py-16 text-center">
-        <p className="text-muted-foreground">No tutors available yet.</p>
+        <p className="text-muted-foreground">
+          No tutors match your filters. Try adjusting them.
+        </p>
       </section>
     );
   }
 
   return (
-    <section className="container mx-auto py-16">
-      <h2 className="mb-8 text-center text-3xl font-semibold tracking-tight">
-        All Tutors
-      </h2>
+    <section className="container mx-auto pt-4 pb-16">
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {tutors.map((tutor) => (
           <TutorCard key={tutor.id} tutor={tutor} />

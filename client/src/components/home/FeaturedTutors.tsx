@@ -16,7 +16,7 @@ export default async function FeaturedTutors() {
 
   if (tutors.length === 0) {
     return (
-      <section className="container mx-auto py-16 text-center">
+      <section className="bg-muted/40 py-16 text-center">
         <p className="text-muted-foreground">No tutors available yet.</p>
       </section>
     );
@@ -25,19 +25,21 @@ export default async function FeaturedTutors() {
   const featuredTutors = tutors.slice(0, 6);
 
   return (
-    <section className="container mx-auto py-16">
-      <h2 className="mb-8 text-center text-3xl font-semibold tracking-tight">
-        Featured Tutors
-      </h2>
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {featuredTutors.map((tutor) => (
-          <TutorCard key={tutor.id} tutor={tutor} />
-        ))}
-      </div>
-      <div className="mt-10 flex justify-center">
-        <Button asChild size="lg" variant="outline">
-          <Link href="/tutors">See More</Link>
-        </Button>
+    <section className="bg-muted/40 py-16">
+      <div className="container mx-auto">
+        <h2 className="mb-8 text-center text-3xl font-semibold tracking-tight">
+          Featured Tutors
+        </h2>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {featuredTutors.map((tutor) => (
+            <TutorCard key={tutor.id} tutor={tutor} />
+          ))}
+        </div>
+        <div className="mt-10 flex justify-center">
+          <Button asChild size="lg" variant="outline">
+            <Link href="/tutors">See More</Link>
+          </Button>
+        </div>
       </div>
     </section>
   );

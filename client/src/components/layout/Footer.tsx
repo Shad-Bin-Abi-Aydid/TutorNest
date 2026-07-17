@@ -31,53 +31,43 @@ type Props = Partial<Footer2Props>;
 
 const defaultProps: Footer2Props = {
   logo: {
-    url: "https://www.shadcnblocks.com",
-    src: "/images/logo/shadcnblocks-logo-word.svg",
-    alt: "logo",
-    title: "Shadcnblocks.com",
+    url: "/",
+    src: "",
+    alt: "TutorNest logo",
+    title: "TutorNest",
   },
-  description: "Finely crafted blocks built with Shadcn UI.",
+  description:
+    "TutorNest connects students with experienced, verified tutors for personalized one-on-one learning — anytime, anywhere.",
   sections: [
     {
-      title: "Product",
+      title: "Explore",
       links: [
-        { name: "Overview", href: "#" },
+        { name: "Home", href: "/" },
+        { name: "Find Tutors", href: "/tutors" },
+        { name: "Become a Tutor", href: "#" },
         { name: "Pricing", href: "#" },
-        { name: "Marketplace", href: "#" },
-        { name: "Features", href: "#" },
-        { name: "Integrations", href: "#" },
       ],
     },
     {
       title: "Company",
       links: [
-        { name: "About", href: "#" },
-        { name: "Team", href: "#" },
-        { name: "Blog", href: "#" },
-        { name: "Careers", href: "#" },
+        { name: "About Us", href: "#" },
         { name: "Contact", href: "#" },
+        { name: "Careers", href: "#" },
+        { name: "Blog", href: "#" },
       ],
     },
     {
       title: "Support",
       links: [
-        { name: "Help center", href: "#" },
-        { name: "Documentation", href: "#" },
-        { name: "Status", href: "#" },
-        { name: "Community", href: "#" },
-      ],
-    },
-    {
-      title: "Resources",
-      links: [
-        { name: "Guides", href: "#" },
-        { name: "Templates", href: "#" },
-        { name: "Sales", href: "#" },
-        { name: "Advertise", href: "#" },
+        { name: "Help Center", href: "#" },
+        { name: "FAQs", href: "#" },
+        { name: "Terms of Service", href: "#" },
+        { name: "Privacy Policy", href: "#" },
       ],
     },
   ],
-  copyright: "© 2024 Shadcnblocks.com. All rights reserved.",
+  copyright: "© 2026 TutorNest. All rights reserved.",
   legalLinks: [
     { name: "Terms and Conditions", href: "#" },
     { name: "Privacy Policy", href: "#" },
@@ -95,19 +85,14 @@ const Footer = (props: Props) => {
   const visibleSections = (sections ?? []).slice(0, MAX_SECTIONS);
 
   return (
-    <section className={cn("py-32", className)}>
+    <section className={cn("border-t border-border py-16", className)}>
       <div className="container mx-auto">
         <footer>
           <div className="grid grid-cols-2 gap-8 lg:grid-cols-6">
             <div className="col-span-2 mb-8 lg:mb-0">
               <div className="flex items-center lg:justify-start">
-                <a href={logo?.url}>
-                  <img
-                    src={logo?.src}
-                    alt={logo?.alt}
-                    title={logo?.title}
-                    className="h-7 dark:invert"
-                  />
+                <a href={logo?.url} className="text-lg font-semibold tracking-tighter text-primary">
+                  {logo?.title}
                 </a>
               </div>
               <p className="mt-4 text-sm font-medium text-muted-foreground">

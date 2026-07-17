@@ -1,3 +1,4 @@
+import TutorFiltersForm from "@/components/tutors/TutorFiltersForm";
 import TutorList from "@/components/tutors/TutorList";
 import { Category, TutorFilters } from "@/types/tutor.type";
 
@@ -22,14 +23,26 @@ export default async function TutorsPage({
     sortOrder: firstOf(params.sortOrder),
   };
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/categories`,
-    );
-    const result = await res.json();
-    
-    const categories: Category[]= result.data ?? [];
-  
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`);
+  const result = await res.json();
 
+  const categories: Category[] = result.data ?? [];
 
-  return <TutorList filters = {filters}/>;
+  return (
+    <div>
+      <section className="container mx-auto flex items-center justify-between gap-4 pt-16 pb-6">
+        <div>
+          <h1 className="text-3xl font-semibold tracking-tight">
+            Find Your Tutor
+          </h1>
+          <p className="mt-1 text-muted-foreground">
+            Browse verified tutors and filter by subject, price, and rating.
+          </p>
+        </div>
+        <TutorFiltersForm categories={categories} />
+      </section>
+
+      <TutorList filters={filters} />
+    </div>
+  );
 }
