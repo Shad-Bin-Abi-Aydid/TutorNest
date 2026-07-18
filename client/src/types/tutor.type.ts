@@ -36,3 +36,17 @@ export interface Category {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface Review {
+  id: string;
+  bookingId: string;
+  studentId: string;
+  tutorProfileId: string;
+  rating: number;
+  comment: string | null;
+  createdAt: string;
+  student: {
+    id: string;
+    name: string;
+  };
+}

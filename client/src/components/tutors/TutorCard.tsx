@@ -20,7 +20,7 @@ const CATEGORY_BADGE_COLORS = [
   "bg-chart-5/15 text-chart-5",
 ];
 
-function categoryBadgeColor(name: string) {
+export function categoryBadgeColor(name: string) {
   const hash = [...name].reduce((sum, char) => sum + char.charCodeAt(0), 0);
   return CATEGORY_BADGE_COLORS[hash % CATEGORY_BADGE_COLORS.length];
 }
