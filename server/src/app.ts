@@ -12,7 +12,12 @@ import { reviewRouter } from "./modules/reviews/review.routes";
 
 const app: Application = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.APP_URL || "http://localhost:3000",
+    credentials: true,
+  })
+);
 app.all("/api/auth/{*any}", toNodeHandler(auth));
 app.use(express.json());
 

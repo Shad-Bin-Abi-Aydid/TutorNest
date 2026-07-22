@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import type { TutorProfile } from "@/types/tutor.type";
 
-import TutorCard from "@/components/tutors/TutorCard";
+import TutorCard from "@/components/modules/tutors/TutorCard";
 
 export default async function FeaturedTutors() {
   const res = await fetch(

@@ -7,17 +7,17 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "../ui/sheet";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+} from "../../ui/sheet";
+import { Button } from "../../ui/button";
+import { Input } from "../../ui/input";
+import { Label } from "../../ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
+} from "../../ui/select";
 import { Menu } from "lucide-react";
 
 export default function TutorFiltersForm({

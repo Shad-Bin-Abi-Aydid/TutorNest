@@ -1,5 +1,6 @@
-import FeaturedTutors from "@/components/home/FeaturedTutors";
-import { Hero } from "@/components/home/Hero";
+import FeaturedTutors from "@/components/modules/home/FeaturedTutors";
+import { Hero } from "@/components/modules/home/Hero";
+
 
 export default function Home() {
   return (

@@ -1,5 +1,5 @@
-import TutorFiltersForm from "@/components/tutors/TutorFiltersForm";
-import TutorList from "@/components/tutors/TutorList";
+import TutorFiltersForm from "@/components/modules/tutors/TutorFiltersForm";
+import TutorList from "@/components/modules/tutors/TutorList";
 import { Category, TutorFilters } from "@/types/tutor.type";
 
 function firstOf(value: string | string[] | undefined): string | undefined {

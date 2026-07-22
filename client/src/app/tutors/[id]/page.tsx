@@ -5,9 +5,9 @@ import { notFound } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { categoryBadgeColor } from "@/components/tutors/TutorCard";
+import { categoryBadgeColor } from "@/components/modules/tutors/TutorCard";
 import type { TutorProfile } from "@/types/tutor.type";
-import TutorReviews from "@/components/tutors/TutorReviews";
+import TutorReviews from "@/components/modules/tutors/TutorReviews";
 
 
 export default async function TutorDynamicPage({
