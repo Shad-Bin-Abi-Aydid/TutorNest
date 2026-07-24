@@ -161,7 +161,7 @@ const RegisterForm = ({
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}
 
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" disabled = {isSubmitting}>
               {buttonText}
             </Button>
           </form>

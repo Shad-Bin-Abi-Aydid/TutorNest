@@ -27,6 +27,8 @@ import {
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { ModeToggle } from "./ModeToggle";
+import { LogoutButton } from "../modules/authentication/LogoutButton";
+import { authClient } from "@/lib/auth-client";
 
 interface MenuItem {
   title: string;
@@ -51,10 +53,6 @@ interface Navbar1Props {
       title: string;
       url: string;
     };
-    logout: {
-      title: string;
-      url: string;
-    };
     signup: {
       title: string;
       url: string;
@@ -76,11 +74,25 @@ const Navbar = ({
   ],
   auth = {
     login: { title: "Login", url: "/login" },
-    logout: { title: "Logout", url: "/logout" },
     signup: { title: "Register", url: "/register" },
   },
   className,
 }: Navbar1Props) => {
+  const logInUser = authClient.useSession();
+
+  const logInAndRegisterButton = (
+    <>
+      <div className="flex gap-2">
+        <Button asChild variant="outline" size="sm">
+          <Link href={auth.login.url}>{auth.login.title}</Link>
+        </Button>
+        <Button asChild size="sm">
+          <Link href={auth.signup.url}>{auth.signup.title}</Link>
+        </Button>
+      </div>
+    </>
+  );
+
   return (
     <section className={cn("py-4", className)}>
       <div className="container mx-auto">
@@ -103,12 +115,11 @@ const Navbar = ({
           </div>
           <div className="flex gap-2">
             <ModeToggle></ModeToggle>
-            <Button asChild variant="outline" size="sm">
-              <Link href={auth.login.url}>{auth.login.title}</Link>
-            </Button>
-            <Button asChild size="sm">
-              <Link href={auth.signup.url}>{auth.signup.title}</Link>
-            </Button>
+            {logInUser.isPending ? null : logInUser.data ? (
+              <LogoutButton />
+            ) : (
+              logInAndRegisterButton
+            )}
           </div>
         </nav>
 
@@ -152,12 +163,11 @@ const Navbar = ({
                     </Accordion>
 
                     <div className="flex flex-col gap-3">
-                      <Button asChild variant="outline">
-                        <Link href={auth.login.url}>{auth.login.title}</Link>
-                      </Button>
-                      <Button asChild>
-                        <Link href={auth.signup.url}>{auth.signup.title}</Link>
-                      </Button>
+                      {logInUser.isPending ? null : logInUser.data ? (
+                        <LogoutButton />
+                      ) : (
+                        logInAndRegisterButton
+                      )}
                     </div>
                   </div>
                 </SheetContent>
