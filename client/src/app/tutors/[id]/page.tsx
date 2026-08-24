@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { categoryBadgeColor } from "@/components/modules/tutors/TutorCard";
 import type { TutorProfile } from "@/types/tutor.type";
 import TutorReviews from "@/components/modules/tutors/TutorReviews";
-
+import { BookingForm } from "@/components/modules/bookings/BookingForm";
 
 export default async function TutorDynamicPage({
   params,
@@ -29,9 +29,6 @@ export default async function TutorDynamicPage({
   const { image, bio, experienceYears, pricePerHour, avgRating } = tutor;
   const { name } = tutor.user;
   const categoryNames = tutor.categories.map((c) => c.category.name);
-
-
-  
 
   return (
     <div>
@@ -96,7 +93,9 @@ export default async function TutorDynamicPage({
             <StatTile
               icon={<GraduationCap className="h-5 w-5" />}
               value={experienceYears}
-              label={experienceYears === 1 ? "Year experience" : "Years experience"}
+              label={
+                experienceYears === 1 ? "Year experience" : "Years experience"
+              }
             />
             <StatTile
               icon={<Star className="h-5 w-5" />}
@@ -119,9 +118,10 @@ export default async function TutorDynamicPage({
                 <span className="text-3xl font-semibold">${pricePerHour}</span>
                 <span className="text-sm text-muted-foreground">/ hour</span>
               </div>
-              <Button size="lg" className="w-full">
-                Book Session
-              </Button>
+              <BookingForm
+                tutorProfileId={tutor.id}
+                categories={tutor.categories}
+              ></BookingForm>
               <p className="text-center text-xs text-muted-foreground">
                 You won&apos;t be charged yet
               </p>
@@ -129,7 +129,7 @@ export default async function TutorDynamicPage({
           </Card>
         </div>
       </section>
-      
+
       {/* Review */}
       <TutorReviews tutorProfileId={tutor.id}></TutorReviews>
     </div>
