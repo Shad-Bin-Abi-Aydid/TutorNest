@@ -30,6 +30,8 @@ import { ModeToggle } from "./ModeToggle";
 import { LogoutButton } from "../modules/authentication/LogoutButton";
 import { authClient } from "@/lib/auth-client";
 
+type UserRole = "STUDENT" | "TUTOR" | "ADMIN";
+
 interface MenuItem {
   title: string;
   url: string;
@@ -58,6 +60,20 @@ interface Navbar1Props {
       url: string;
     };
   };
+  dashboard?: {
+    STUDENT?: {
+      title: string;
+      url: string;
+    };
+    TUTOR?: {
+      title: string;
+      url: string;
+    };
+    ADMIN?: {
+      title: string;
+      url: string;
+    };
+  };
 }
 
 const Navbar = ({
@@ -76,9 +92,16 @@ const Navbar = ({
     login: { title: "Login", url: "/login" },
     signup: { title: "Register", url: "/register" },
   },
+  dashboard = {
+    STUDENT: { title: "Dashboard", url: "/dashboard" },
+    TUTOR: { title: "Dashboard", url: "/tutor/dashboard" },
+    ADMIN: { title: "Dashboard", url: "/admin" },
+  },
   className,
 }: Navbar1Props) => {
   const logInUser = authClient.useSession();
+
+  const role = logInUser.data?.user.role as UserRole;
 
   const logInAndRegisterButton = (
     <>
@@ -91,6 +114,18 @@ const Navbar = ({
         </Button>
       </div>
     </>
+  );
+
+  const dashboardLink = dashboard?.[role!];
+
+  const dashboardButton = logInUser.data ? (
+    <>
+      <Button asChild variant="outline" size="sm">
+        <Link href={dashboardLink?.url ?? "/"}>{dashboardLink?.title}</Link>
+      </Button>
+    </>
+  ) : (
+    ""
   );
 
   return (
@@ -116,7 +151,10 @@ const Navbar = ({
           <div className="flex gap-2">
             <ModeToggle></ModeToggle>
             {logInUser.isPending ? null : logInUser.data ? (
-              <LogoutButton />
+              <div className="flex gap-4">
+                {dashboardButton}
+                <LogoutButton />
+              </div>
             ) : (
               logInAndRegisterButton
             )}
@@ -164,7 +202,10 @@ const Navbar = ({
 
                     <div className="flex flex-col gap-3">
                       {logInUser.isPending ? null : logInUser.data ? (
-                        <LogoutButton />
+                        <div className="flex gap-4">
+                          {dashboardButton}
+                          <LogoutButton />
+                        </div>
                       ) : (
                         logInAndRegisterButton
                       )}
