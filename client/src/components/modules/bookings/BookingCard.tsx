@@ -1,3 +1,4 @@
+"use client";
 import { Calendar, Clock } from "lucide-react";
 
 import { categoryBadgeColor } from "@/components/modules/tutors/TutorCard";
@@ -10,6 +11,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Booking } from "@/types/booking.type";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const STATUS_STYLES: Record<Booking["status"], string> = {
   PENDING: "bg-amber-500/15 text-amber-600",
@@ -19,14 +22,44 @@ const STATUS_STYLES: Record<Booking["status"], string> = {
 };
 
 export default function BookingCard({ booking }: { booking: Booking }) {
-  const { tutorProfile, category, scheduledAt, durationMinutes, status } = booking;
+  const { tutorProfile, category, scheduledAt, durationMinutes, status } =
+    booking;
 
-  const formattedDate = new Date(scheduledAt).toLocaleString(undefined, {
+  const router = useRouter();
+  const formattedDate = new Date(scheduledAt).toLocaleString("en-US", {
     dateStyle: "medium",
     timeStyle: "short",
   });
 
   const canCancel = status === "PENDING" || status === "CONFIRMED";
+
+  const handleCancel = async () => {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/bookings/${booking.id}`,
+      {
+        method: "PATCH",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          status: "CANCELLED",
+        }),
+      },
+    );
+
+    const result = await res.json();
+
+    if (!res.ok) {
+      const message = result.message ?? "Something went wrong!";
+      toast.error(message);
+      return;
+    }
+
+    toast.success("Booking cancelled successfully.");
+
+    router.refresh();
+  };
 
   return (
     <Card>
@@ -57,13 +90,16 @@ export default function BookingCard({ booking }: { booking: Booking }) {
         </div>
       </CardContent>
 
-      {canCancel && (
-        <CardFooter>
-          <Button variant="destructive" size="sm">
-            Cancel Booking
-          </Button>
-        </CardFooter>
-      )}
+      <CardFooter>
+        <Button
+          onClick={handleCancel}
+          variant="destructive"
+          size="sm"
+          disabled={!canCancel}
+        >
+          Cancel Booking
+        </Button>
+      </CardFooter>
     </Card>
   );
 }
