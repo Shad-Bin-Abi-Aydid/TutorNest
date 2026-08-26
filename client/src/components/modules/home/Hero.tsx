@@ -2,12 +2,14 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { getServerSession } from "@/lib/get-session";
 
 interface HeroProps {
   className?: string;
 }
 
-const Hero = ({ className }: HeroProps) => {
+const Hero = async ({ className }: HeroProps) => {
+  const session = await getServerSession();
   return (
     <section className={cn("relative overflow-hidden py-20 md:py-32", className)}>
       <div className="absolute inset-0 -z-10 bg-linear-to-br from-primary/15 via-background to-chart-2/15" />
@@ -27,9 +29,12 @@ const Hero = ({ className }: HeroProps) => {
           <Button asChild size="lg">
             <Link href="/tutors">Find a Tutor</Link>
           </Button>
-          <Button asChild variant="outline" size="lg">
+          {
+            (!session.data) &&
+            <Button asChild variant="outline" size="lg">
             <Link href="/become-a-tutor">Become a Tutor</Link>
           </Button>
+          }
         </div>
       </div>
     </section>

@@ -15,7 +15,7 @@ import {
 import { cn } from "@/lib/utils";
 import { z } from "zod";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { handleGoogleSignIn } from "./auth.action";
 
@@ -33,7 +33,6 @@ const formSchema = z.object({
   role: z.enum(["STUDENT", "TUTOR"]),
 });
 
-
 const RegisterForm = ({
   heading = "Create an Account",
   buttonText = "Create Account",
@@ -43,11 +42,15 @@ const RegisterForm = ({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [role, setRole] = useState("STUDENT");
+
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const roleParam = searchParams.get("role");
+  const initialRole = roleParam === "TUTOR" ? "TUTOR" : "STUDENT";
+  const [role, setRole] = useState(initialRole);
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -161,7 +164,7 @@ const RegisterForm = ({
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}
 
-            <Button type="submit" className="w-full" disabled = {isSubmitting}>
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
               {buttonText}
             </Button>
           </form>
