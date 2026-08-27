@@ -8,7 +8,10 @@ const createTutorProfile = async (
   next: NextFunction,
 ) => {
   try {
-    const result = await tutorProfileServices.createTutorProfile(req.body);
+    const result = await tutorProfileServices.createTutorProfile({
+      ...req.body,
+      userId: req.user!.id,
+    });
 
     res.status(201).json({
       success: true,
@@ -91,6 +94,34 @@ const getSingleTutorProfile = async (
   }
 };
 
+// get tutorProfile By UserId(own - me)
+const getMyTutorProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const userId = req.user!.id;
+
+    const result = await tutorProfileServices.getMyTutorProfile(userId);
+
+    if (!result) {
+      res.status(404).json({
+        success: false,
+        message: "Tutor profile not found",
+      });
+      return;
+    }
+    res.status(200).json({
+      success: true,
+      message: "Get tutor profile successfully",
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // update tutorProfile
 const updateTutorProfile = async (
   req: Request,
@@ -138,4 +169,5 @@ export const tutorProfileController = {
   getSingleTutorProfile,
   updateTutorProfile,
   deleteTutorProfile,
+  getMyTutorProfile
 };
