@@ -3,7 +3,13 @@ import { headers } from "next/headers";
 import { Booking } from "@/types/booking.type";
 import BookingCard from "./BookingCard";
 
-export default async function BookingList() {
+export default async function BookingList({
+  emptyMessage = "You have no bookings yet. Browse tutors to schedule your first session.",
+  role = "STUDENT"
+}: {
+  emptyMessage?: string;
+  role? : "STUDENT" | "TUTOR";
+}) {
   const requestHeaders = await headers();
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/bookings`, {
@@ -15,10 +21,7 @@ export default async function BookingList() {
   if (res.status === 404) {
     return (
       <section className="container mx-auto py-16 text-center">
-        <p className="text-muted-foreground">
-          You have no bookings yet. Browse tutors to schedule your first
-          session.
-        </p>
+        <p className="text-muted-foreground">{emptyMessage}</p>
       </section>
     );
   }
@@ -30,7 +33,7 @@ export default async function BookingList() {
     <section className="container mx-auto pt-4 pb-16">
       <div className="flex flex-col gap-4">
         {bookings.map((booking) => (
-          <BookingCard key={booking.id} booking={booking} />
+          <BookingCard key={booking.id} booking={booking} role={role} />
         ))}
       </div>
     </section>

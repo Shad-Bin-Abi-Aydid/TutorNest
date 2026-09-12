@@ -1,3 +1,4 @@
+import BookingList from "@/components/modules/bookings/BookingList";
 import CreateTutorProfileForm from "@/components/modules/tutorProfile/CreateTutorProfileForm";
 import { Category } from "@/types/tutor.type";
 import { headers } from "next/headers";
@@ -22,6 +23,7 @@ export default async function TutorDashboard() {
     const categoriesResult = await categoriesRes.json();
     const category: Category[] = categoriesResult.data ?? [];
 
+    
     return (
       <CreateTutorProfileForm categories={category}></CreateTutorProfileForm>
     );
@@ -29,5 +31,9 @@ export default async function TutorDashboard() {
 
   const result = await res.json();
 
-  return <div>Tutor Dashboard</div>;
+  const emptyMessage =
+      "You don't have any bookings yet. Once a student books a session with you, it'll show up here.";
+
+
+  return <BookingList emptyMessage = {emptyMessage} role = "TUTOR"/>;
 }

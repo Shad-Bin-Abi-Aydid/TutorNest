@@ -21,7 +21,13 @@ const STATUS_STYLES: Record<Booking["status"], string> = {
   CANCELLED: "bg-red-500/15 text-red-600",
 };
 
-export default function BookingCard({ booking }: { booking: Booking }) {
+export default function BookingCard({
+  booking,
+  role = "STUDENT",
+}: {
+  booking: Booking;
+  role?: "STUDENT" | "TUTOR";
+}) {
   const { tutorProfile, category, scheduledAt, durationMinutes, status } =
     booking;
 
@@ -31,9 +37,7 @@ export default function BookingCard({ booking }: { booking: Booking }) {
     timeStyle: "short",
   });
 
-  const canCancel = status === "PENDING" || status === "CONFIRMED";
-
-  const handleCancel = async () => {
+  const handleStatus = async (newStatus: Booking["status"]) => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/bookings/${booking.id}`,
       {
@@ -43,7 +47,7 @@ export default function BookingCard({ booking }: { booking: Booking }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          status: "CANCELLED",
+          status: newStatus,
         }),
       },
     );
@@ -56,7 +60,7 @@ export default function BookingCard({ booking }: { booking: Booking }) {
       return;
     }
 
-    toast.success("Booking cancelled successfully.");
+    toast.success(`Booking ${newStatus} successfully.`);
 
     router.refresh();
   };
@@ -65,7 +69,9 @@ export default function BookingCard({ booking }: { booking: Booking }) {
     <Card>
       <CardHeader>
         <div className="flex items-start justify-between gap-2">
-          <CardTitle>{tutorProfile.user.name}</CardTitle>
+          <CardTitle>
+            {role === "TUTOR" ? booking.student.name : tutorProfile.user.name}
+          </CardTitle>
           <span
             className={`rounded-full px-3 py-1 text-xs font-medium ${STATUS_STYLES[status]}`}
           >
@@ -92,13 +98,43 @@ export default function BookingCard({ booking }: { booking: Booking }) {
 
       <CardFooter>
         <Button
-          onClick={handleCancel}
+          onClick={() => handleStatus("CANCELLED")}
           variant="destructive"
           size="sm"
-          disabled={!canCancel}
+          disabled={status === "CANCELLED" || status === "COMPLETED"}
         >
           Cancel Booking
         </Button>
+        {role === "TUTOR" && (
+          <>
+            <Button
+              onClick={() => handleStatus("CONFIRMED")}
+              size="sm"
+              disabled={status !== "PENDING"}
+            >
+              Confirm Booking
+            </Button>
+
+            <Button
+              onClick={() => {
+                const sessionEndTime =
+                  new Date(scheduledAt).getTime() + durationMinutes * 60 * 1000;
+                const hasEnded = Date.now() >= sessionEndTime;
+
+                if(!hasEnded) {
+                  toast.error("You can mark this session as completed once it has ended.");
+                  return;
+                }
+                handleStatus("COMPLETED");
+
+              }}
+              size="sm"
+              disabled={status !== "CONFIRMED"}
+            >
+              Completed Booking
+            </Button>
+          </>
+        )}
       </CardFooter>
     </Card>
   );

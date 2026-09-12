@@ -22,7 +22,7 @@ const createBooking = async (data: {
     data: {
       ...data,
       scheduledAt: new Date(data.scheduledAt),
-      status: "CONFIRMED",
+      status: "PENDING",
     },
     include: bookingInclude,
   });
@@ -134,7 +134,8 @@ const updateBookingStatus = async (
   if (
     role === UserRole.TUTOR &&
     (newStatus === BookingStatus.CANCELLED ||
-      newStatus === BookingStatus.COMPLETED)
+      newStatus === BookingStatus.COMPLETED ||
+      newStatus === BookingStatus.CONFIRMED)
   ) {
     const tutorProfile = await prisma.tutorProfile.findUnique({
       where: {
