@@ -8,6 +8,7 @@ const bookingInclude = {
     include: { user: { select: { id: true, name: true, email: true } } },
   },
   category: true,
+  review:true,
 } as const;
 
 // create booking

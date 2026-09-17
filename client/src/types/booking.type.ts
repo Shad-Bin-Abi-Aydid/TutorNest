@@ -21,4 +21,13 @@ export interface Booking {
     };
   };
   category: Category;
+  review: {
+    id: string;
+    bookingId: string;
+    studentId: string;
+    tutorProfileId: string;
+    rating: number;
+    comment: string | null;
+    createdAt: string;
+  } | null;
 }

@@ -13,6 +13,7 @@ import {
 import { Booking } from "@/types/booking.type";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import ReviewForm from "./ReviewForm";
 
 const STATUS_STYLES: Record<Booking["status"], string> = {
   PENDING: "bg-amber-500/15 text-amber-600",
@@ -105,6 +106,8 @@ export default function BookingCard({
         >
           Cancel Booking
         </Button>
+
+        {/* for tutor operations */}
         {role === "TUTOR" && (
           <>
             <Button
@@ -121,12 +124,13 @@ export default function BookingCard({
                   new Date(scheduledAt).getTime() + durationMinutes * 60 * 1000;
                 const hasEnded = Date.now() >= sessionEndTime;
 
-                if(!hasEnded) {
-                  toast.error("You can mark this session as completed once it has ended.");
+                if (!hasEnded) {
+                  toast.error(
+                    "You can mark this session as completed once it has ended.",
+                  );
                   return;
                 }
                 handleStatus("COMPLETED");
-
               }}
               size="sm"
               disabled={status !== "CONFIRMED"}
@@ -135,6 +139,13 @@ export default function BookingCard({
             </Button>
           </>
         )}
+
+        {/* for student operations */}
+        {role === "STUDENT" &&
+          status === "COMPLETED" &&
+          booking.review === null && (
+            <ReviewForm bookingId={booking.id}></ReviewForm>
+          )}
       </CardFooter>
     </Card>
   );
