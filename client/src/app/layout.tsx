@@ -5,6 +5,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { Footer } from "@/components/layout/Footer";
 import { Toaster } from "sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,10 +41,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar></Navbar>
-          {children}
-          <Footer></Footer>
-          <Toaster richColors position="top-center" />
+          <TooltipProvider>
+            <Navbar></Navbar>
+            {children}
+            <Footer></Footer>
+            <Toaster richColors position="top-center" />
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>
