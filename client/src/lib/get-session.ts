@@ -7,7 +7,9 @@ export const getServerSession = cache(async () => {
 
   const session = await authClient.getSession({
     fetchOptions: {
-      headers: requestHeaders,
+      headers: {
+        cookie: requestHeaders.get("cookie") ?? "",
+      },
     },
   });
 
