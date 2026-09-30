@@ -6,7 +6,7 @@
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "ESNext",
+    "module": "CommonJS",
     "target": "ES2023",
     // "types": [],
     // For nodejs:
@@ -31,7 +31,7 @@
     // "noFallthroughCasesInSwitch": true,
     // "noPropertyAccessFromIndexSignature": true,
 
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "ignoreDeprecations": "6.0",
 
