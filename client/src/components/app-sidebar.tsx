@@ -21,6 +21,7 @@ import {
   CommandIcon,
 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
+import Link from "next/link";
 
 
  const navMain= [
@@ -70,12 +71,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
-              <a href="#">
+              <Link href="/">
                 <CommandIcon className="size-5!" />
                 <span className="text-lg font-semibold tracking-tighter text-primary">
                   TutorNest
                 </span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
