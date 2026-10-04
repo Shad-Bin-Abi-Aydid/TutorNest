@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { auth } from "../lib/auth";
 
+
 export enum UserRole {
   ADMIN = "ADMIN",
   STUDENT = "STUDENT",
@@ -29,6 +30,14 @@ export const requireAuth = (...roles: UserRole[]) => {
         return res.status(401).json({
           success: false,
           message: "You are not authorized",
+        });
+      }
+
+      // check the login user Block status
+      if (session.user.status === "BLOCKED") {
+        return res.status(403).json({
+          success: false,
+          message: "Your account has been blocked. Please contact the admin.",
         });
       }
 

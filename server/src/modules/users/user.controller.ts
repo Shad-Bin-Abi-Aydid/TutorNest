@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { userServices } from "./user.services";
 
+
 // get all users
 const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -26,7 +27,7 @@ const getSingleUser = async (
     const userId = req.params.id as string;
 
     const result = await userServices.getSingleUser(userId);
-     if (!result) {
+    if (!result) {
       res.status(404).json({
         success: false,
         message: "User not found",
@@ -45,11 +46,7 @@ const getSingleUser = async (
 };
 
 // update user
-const updateUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+const updateUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.params.id as string;
 
@@ -66,15 +63,27 @@ const updateUser = async (
 };
 
 // delete user
-const deleteUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.params.id as string;
 
+    if (userId === req.user!.id) {
+      res.status(403).json({
+        success: false,
+        message: "You can't delete your own account",
+      });
+      return;
+    }
+
     const result = await userServices.deleteUser(userId);
+
+    if (result.error) {
+      res.status(409).json({
+        success: false,
+        message: result.error,
+      });
+      return;
+    }
 
     res.status(204).send();
   } catch (err) {
@@ -86,5 +95,5 @@ export const userController = {
   getAllUsers,
   getSingleUser,
   updateUser,
-  deleteUser
+  deleteUser,
 };

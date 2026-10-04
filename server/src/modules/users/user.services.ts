@@ -66,13 +66,31 @@ const updateUser = async (
 
 // delete user
 const deleteUser = async (id: string) => {
+  const numberOfExistingBooking = await prisma.booking.count({
+    where: {
+      studentId: id,
+    },
+  });
+
+  const tutorProfile = await prisma.tutorProfile.findUnique({
+    where: {
+      userId: id,
+    },
+  });
+
+  if (numberOfExistingBooking > 0 || tutorProfile) {
+    return {
+      error:
+        "This user has booking history and can't be deleted. Block them instead.",
+    };
+  }
   const result = await prisma.user.delete({
     where: {
       id,
     },
   });
 
-  return result;
+  return { data: result };
 };
 
 export const userServices = {
