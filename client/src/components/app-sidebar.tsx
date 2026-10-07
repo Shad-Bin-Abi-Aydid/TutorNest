@@ -24,7 +24,7 @@ import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
 
 
- const navMain= [
+export const navMain = [
     {
       title: "Dashboard",
       url: "/admin",

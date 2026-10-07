@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { Footer } from "@/components/layout/Footer";
+import { HideOnAdmin } from "@/components/layout/HideOnAdmin";
 import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
@@ -42,9 +43,13 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <TooltipProvider>
-            <Navbar></Navbar>
+            <HideOnAdmin>
+              <Navbar></Navbar>
+            </HideOnAdmin>
             {children}
-            <Footer></Footer>
+            <HideOnAdmin>
+              <Footer></Footer>
+            </HideOnAdmin>
             <Toaster richColors position="top-center" />
           </TooltipProvider>
         </ThemeProvider>
