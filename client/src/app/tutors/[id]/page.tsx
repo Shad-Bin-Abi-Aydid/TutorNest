@@ -3,9 +3,11 @@ import { ArrowLeft, BadgeCheck, GraduationCap, Star } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { categoryBadgeColor } from "@/components/modules/tutors/TutorCard";
+import { getInitials } from "@/lib/utils";
 import type { TutorProfile } from "@/types/tutor.type";
 import TutorReviews from "@/components/modules/tutors/TutorReviews";
 import { BookingForm } from "@/components/modules/bookings/BookingForm";
@@ -26,8 +28,8 @@ export default async function TutorDynamicPage({
   }
 
   const tutor: TutorProfile = result.data;
-  const { image, bio, experienceYears, pricePerHour, avgRating } = tutor;
-  const { name } = tutor.user;
+  const { bio, experienceYears, pricePerHour, avgRating } = tutor;
+  const { name, image } = tutor.user;
   const categoryNames = tutor.categories.map((c) => c.category.name);
 
   return (
@@ -45,12 +47,18 @@ export default async function TutorDynamicPage({
           </Link>
         </div>
         <div className="container mx-auto flex flex-col items-center gap-6 py-10 text-center md:flex-row md:items-end md:text-left">
-          {/* eslint-disable-next-line @next/next/no-img-element -- tutor-uploaded image URLs aren't configured for next/image yet */}
-          <img
-            alt={name}
-            src={image || "/placeholder-avatar.png"}
-            className="h-36 w-36 shrink-0 rounded-2xl object-cover ring-4 ring-background"
-          />
+          <Avatar className="size-36 rounded-2xl bg-background ring-4 ring-background after:rounded-2xl">
+            <AvatarImage
+              src={image ?? undefined}
+              alt={name}
+              className="rounded-2xl"
+            />
+            <AvatarFallback
+              className={`rounded-2xl text-5xl font-semibold ${categoryBadgeColor(name)}`}
+            >
+              {getInitials(name)}
+            </AvatarFallback>
+          </Avatar>
 
           <div className="flex flex-1 flex-col gap-3">
             <div className="flex flex-col items-center gap-2 md:flex-row md:items-center md:justify-between">

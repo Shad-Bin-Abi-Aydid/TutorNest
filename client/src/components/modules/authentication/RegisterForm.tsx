@@ -18,6 +18,7 @@ import React, { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { handleGoogleSignIn } from "./auth.action";
+import { uploadImage } from "@/lib/upload-image";
 
 interface RegisterFormProps {
   heading?: string;
@@ -33,6 +34,8 @@ const formSchema = z.object({
   role: z.enum(["STUDENT", "TUTOR"]),
 });
 
+const MAX_IMAGE_SIZE_MB = 5;
+
 const RegisterForm = ({
   heading = "Create an Account",
   buttonText = "Create Account",
@@ -42,6 +45,7 @@ const RegisterForm = ({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -69,13 +73,40 @@ const RegisterForm = ({
       return;
     }
 
+    // validate the optional profile photo
+    if (imageFile) {
+      if (!imageFile.type.startsWith("image/")) {
+        setError("Please choose an image file.");
+        return;
+      }
+
+      if (imageFile.size > MAX_IMAGE_SIZE_MB * 1024 * 1024) {
+        setError(`Image must be ${MAX_IMAGE_SIZE_MB} MB or smaller.`);
+        return;
+      }
+    }
+
     setIsSubmitting(true);
+
+    // upload the photo first, so we can save its URL with the new account
+    let imageUrl: string | undefined;
+
+    if (imageFile) {
+      try {
+        imageUrl = await uploadImage(imageFile);
+      } catch {
+        setError("Couldn't upload your photo. Please try again.");
+        setIsSubmitting(false);
+        return;
+      }
+    }
 
     const { data, error: signUpError } = await authClient.signUp.email({
       name,
       email,
       password,
       role,
+      image: imageUrl,
     });
 
     setIsSubmitting(false);
@@ -162,6 +193,23 @@ const RegisterForm = ({
                 </SelectContent>
               </Select>
             </div>
+
+            <div className="flex flex-col gap-y-1.5">
+              <Label htmlFor="image">
+                Profile photo
+                <span className="font-normal text-muted-foreground">
+                  (optional)
+                </span>
+              </Label>
+              <Input
+                id="image"
+                name="image"
+                type="file"
+                accept="image/*"
+                onChange={(e) => setImageFile(e.target.files?.[0] ?? null)}
+              />
+            </div>
+
             {error && <p className="text-sm text-destructive">{error}</p>}
 
             <Button type="submit" className="w-full" disabled={isSubmitting}>

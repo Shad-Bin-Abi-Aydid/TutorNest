@@ -25,7 +25,7 @@ const createTutorProfile = async (data: {
     },
     // return full category names instead of just IDs
     include: {
-      user: { select: { id: true, name: true, email: true } },
+      user: { select: { id: true, name: true, email: true, image: true } },
       categories: { include: { category: true } },
     },
   });
@@ -80,7 +80,7 @@ const getAllTutorProfiles = async (filters: {
     },
 
     include: {
-      user: { select: { id: true, name: true, email: true } },
+      user: { select: { id: true, name: true, email: true, image: true } },
       categories: { include: { category: true } },
       reviews: { select: { rating: true } },
     },
@@ -118,7 +118,7 @@ const getSingleTutorProfile = async (tutorId: string) => {
       id: tutorId,
     },
     include: {
-      user: { select: { id: true, name: true, email: true } },
+      user: { select: { id: true, name: true, email: true, image: true } },
       categories: { include: { category: true } },
     },
   });
@@ -130,7 +130,7 @@ const getMyTutorProfile = async (userId: string) => {
   const result = await prisma.tutorProfile.findUnique({
     where: { userId },
     include:{
-      user: { select: { id: true, name: true, email: true } },
+      user: { select: { id: true, name: true, email: true, image: true } },
       categories: { include: { category: true } },
     }
   });
@@ -164,7 +164,7 @@ const updateTutorProfile = async (
       }),
     },
     include: {
-      user: { select: { id: true, name: true, email: true } },
+      user: { select: { id: true, name: true, email: true, image: true } },
       categories: { include: { category: true } },
     },
   });

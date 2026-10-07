@@ -1,6 +1,7 @@
 import { GraduationCap, Star } from "lucide-react";
 import Link from "next/link";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { getInitials } from "@/lib/utils";
 import type { TutorProfile } from "@/types/tutor.type";
 
 const CATEGORY_BADGE_COLORS = [
@@ -26,18 +28,22 @@ export function categoryBadgeColor(name: string) {
 }
 
 export default function TutorCard({ tutor }: { tutor: TutorProfile }) {
-  const { id, image, bio, experienceYears, pricePerHour, avgRating } = tutor;
-  const { name } = tutor.user;
+  const { id, bio, experienceYears, pricePerHour, avgRating } = tutor;
+  const { name, image } = tutor.user;
   const categoryNames = tutor.categories.map((c) => c.category.name);
 
   return (
-    <Card className="flex h-full flex-col">
-      {/* eslint-disable-next-line @next/next/no-img-element -- tutor-uploaded image URLs aren't configured for next/image yet */}
-      <img
-        alt={name}
-        src={image || "/placeholder-avatar.png"}
-        className="h-48 w-full object-cover"
-      />
+    <Card className="flex h-full flex-col pt-0">
+      <div className="flex h-36 items-center justify-center bg-linear-to-br from-primary/15 via-background to-chart-2/15">
+        <Avatar className="size-24 bg-background ring-4 ring-background">
+          <AvatarImage src={image ?? undefined} alt={name} />
+          <AvatarFallback
+            className={`text-2xl font-semibold ${categoryBadgeColor(name)}`}
+          >
+            {getInitials(name)}
+          </AvatarFallback>
+        </Avatar>
+      </div>
 
       <CardHeader>
         <div className="flex items-start justify-between gap-2">
